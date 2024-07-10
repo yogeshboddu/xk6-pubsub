@@ -2,7 +2,6 @@ package pubsub
 
 import (
 	"context"
-	"errors"
 	"log"
 	"time"
 
@@ -11,7 +10,6 @@ import (
 	"github.com/ThreeDotsLabs/watermill/message"
 
 	"go.k6.io/k6/js/modules"
-	"go.k6.io/k6/lib"
 
 	"github.com/mitchellh/mapstructure"
 	"google.golang.org/api/option"
@@ -77,13 +75,6 @@ func (ps *PubSub) Publisher(config map[string]interface{}) *googlecloud.Publishe
 // googlecloud.Publisher. The msg value must be passed as string
 // and will be converted to bytes sequence before publishing.
 func (ps *PubSub) Publish(ctx context.Context, p *googlecloud.Publisher, topic, msg string) error {
-	state := lib.GetState(ctx)
-
-	if state == nil {
-		err := errors.New("xk6-pubsub: state is nil")
-		ReportError(err, "cannot determine state")
-		return err
-	}
 
 	err := p.Publish(
 		topic,
